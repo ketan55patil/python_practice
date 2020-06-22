@@ -1,21 +1,10 @@
-import sys
-import os
+class PlayTicTacToe():
 
-
-class PlayTicTacToe:
-
-    def __init__(self):
-        self.row_1 = [1, 2, 3]
-        self.row_2 = [4, 5, 6]
-        self.row_3 = [7, 8, 9]
-
-        self.rows = [self.row_1, self.row_2, self.row_3]
-
-    def print_rows(self):
-        for row in self.rows:
+    def print_rows(self, rows):
+        for row in rows:
             print('{:^5}|{:^5}|{:^5}'.format(row[0], row[1], row[2]))
 
-    def check_if_won(self):
+    def check_if_won(self, rows):
         if_won = False
         col_1 = []
         col_2 = []
@@ -24,10 +13,10 @@ class PlayTicTacToe:
         diag_lr = []
         diag_rl = []
 
-        for row in self.rows:
+        for row in rows:
             # Check if rows are same
             if row[0] == row[1] and row[0] == row[2]:
-                print('You won! Items in row {} are same.'.format(self.rows.index(row)+1))
+                print('You won! Items in row {} are same.'.format(rows.index(row) + 1))
                 if_won = True
                 return if_won
 
@@ -37,10 +26,10 @@ class PlayTicTacToe:
             col_3.append(row[2])
 
             # get diags
-            if self.rows.index(row) == 0:
+            if rows.index(row) == 0:
                 diag_lr.append(row[0])
                 diag_rl.append(row[2])
-            elif self.rows.index(row) == 1:
+            elif rows.index(row) == 1:
                 diag_lr.append(row[1])
                 diag_rl.append(row[1])
             else:
@@ -67,7 +56,7 @@ class PlayTicTacToe:
 
         return if_won
 
-    def play_game(self, xo):
+    def play_game(self, xo, rows):
         while True:
             try:
                 player_input = int(input(f'Enter where do you want to place {xo}: '))
@@ -77,49 +66,57 @@ class PlayTicTacToe:
                 if player_input == 0:
                     print('You decided to quite the game!')
                     return False
-                if self.update_rows(player_input, xo):
+                if self.update_rows(player_input, xo, rows):
                     break
 
-        self.print_rows()
-        if_won = self.check_if_won()
+        self.print_rows(rows)
+        if_won = self.check_if_won(rows)
         if if_won:
             return False
 
         return True
 
-    def update_rows(self, player_input, xo):
+    def update_rows(self, player_input, xo, rows):
         player_input = int(player_input) - 1
 
         row_to_update = int(player_input / 3)
         index_to_update = int(player_input % 3)
 
-        if self.rows[row_to_update][index_to_update] == 'x' or \
-           self.rows[row_to_update][index_to_update] == 'o':
+        if rows[row_to_update][index_to_update] == 'x' or \
+           rows[row_to_update][index_to_update] == 'o':
             print('You can not overwrite !')
             return False
         else:
-            self.rows[row_to_update][index_to_update] = xo
+            rows[row_to_update][index_to_update] = xo
             return True
 
 
-game = PlayTicTacToe()
+if __name__ == "__main__":
 
-keep_playing = True
-print('Enter 0 to exit...')
-game.print_rows()
+    row_1 = [1, 2, 3]
+    row_2 = [4, 5, 6]
+    row_3 = [7, 8, 9]
 
-player = 'x'
-turn_count = 0
+    my_rows = [row_1, row_2, row_3]
 
-while keep_playing:
-    # Check if its a tie
-    if turn_count < 9:
-        keep_playing = game.play_game(player)
-        if player == 'x':
-            player = 'o'
+    game = PlayTicTacToe()
+
+    keep_playing = True
+    print('Enter 0 to exit...')
+    game.print_rows(my_rows)
+
+    player = 'x'
+    turn_count = 0
+
+    while keep_playing:
+        # Check if its a tie
+        if turn_count < 9:
+            keep_playing = game.play_game(player, my_rows)
+            if player == 'x':
+                player = 'o'
+            else:
+                player = 'x'
+            turn_count += 1
         else:
-            player = 'x'
-        turn_count += 1
-    else:
-        print('That is a Tie!!!')
-        keep_playing = False
+            print('That is a Tie!!!')
+            keep_playing = False
