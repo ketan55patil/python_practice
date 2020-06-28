@@ -30,8 +30,6 @@ class PlayTicTacToe:
         if new_rows == '':
             new_rows = self.rows
 
-        # print(f'new_rows in check_rows is {new_rows}')
-
         for row in new_rows:
             # print(f'row is {row}')
             if len(set(row)) == 1:
@@ -48,7 +46,6 @@ class PlayTicTacToe:
 
     def check_diags(self):
         new_rows = [[self.rows[0][0], self.rows[1][1], self.rows[2][2]]]
-        # print(f'new_rows in check diags is {new_rows}')
         if self.check_rows(new_rows):
             return True
 
@@ -62,7 +59,6 @@ class PlayTicTacToe:
         if self.play_count < 9:
             return False
         else:
-            # print('its a draw')
             return True
 
     def is_overwrite(self, row_to_update, index_to_update):
@@ -91,26 +87,30 @@ class PlayTicTacToe:
             player_input = int(player_input)
         except ValueError:
             return 'invalid'
+
+        # if player_input < 0 or player_input > 9:
+        if not 0 <= player_input <= 9:
+            return 'invalid'
+
+        if player_input == 0:
+            return False
+
+        if self.update_rows(player_input):
+            if self.is_win():
+                return 'win'
+            elif self.is_draw():
+                return 'draw'
         else:
-            if player_input == 0:
-                return False
+            return 'overwrite'
 
-            if self.update_rows(player_input):
-                if self.is_win():
-                    return 'win'
-                elif self.is_draw():
-                    return 'draw'
-            else:
-                return 'overwrite'
+        # Next player
+        if self.player == 'x':
+            self.player = 'o'
+        else:
+            self.player = 'x'
 
-            # Next player
-            if self.player == 'x':
-                self.player = 'o'
-            else:
-                self.player = 'x'
-
-            # print(f'play count is {self.play_count}')
-            return True
+        # print(f'play count is {self.play_count}')
+        return True
 
 
 if __name__ == "__main__":
@@ -126,7 +126,7 @@ if __name__ == "__main__":
         if play_status == 'overwrite':
             print(f'You can not overwrite the value at position {my_player_input}!!! Please try again...')
         elif play_status == 'invalid':
-            print(f'Invalid input please try again or enter \'0\' to exit...')
+            print(f'Invalid input. Acceptable values are \'1\' to \'9\' or enter \'0\' to exit...')
         elif play_status != True:
             if play_status == 'draw':
                 print('Its a draw!!!')

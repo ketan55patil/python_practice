@@ -1,8 +1,10 @@
 from .ticTacToe_V2 import PlayTicTacToe
-import mock
-import builtins
+from ddt import ddt, data
+import unittest
 
-class TestTicTacToeV2:
+
+@ddt
+class TestTicTacToeV2(unittest.TestCase):
 
     def play_game(self, my_input):
         game = PlayTicTacToe()
@@ -11,30 +13,37 @@ class TestTicTacToeV2:
             play_status = game.continue_playing(item)
         return play_status
 
-    def test_invalid_input(self):
-        assert self.play_game([1, 'a']) == 'invalid'
+    @data(['a'], [1, 'a'], ['!', 'a'], [-1])
+    def test_invalid_input(self, value):
+        assert self.play_game(value) == 'invalid'
 
-    def test_overwrite_value(self):
-        assert self.play_game([1, 1]) == 'overwrite'
+    @data([1, 1])
+    def test_overwrite_value(self, value):
+        assert self.play_game(value) == 'overwrite'
 
     # def test_won_row(self, player, row):
-    def test_won_row(self):
-        assert self.play_game([1, 4, 2, 5, 3]) == 'win'
+    @data([1, 4, 2, 5, 3], [4, 1, 5, 2, 6, 3], [7, 4, 8, 5, 9], [1, 1, 4, 2, 5, 3])
+    def test_won_row(self, value):
+        assert self.play_game(value) == 'win'
 
     # def test_won_col(self, player, col):
-    def test_won_col(self):
-        assert self.play_game([1, 2, 4, 5, 7]) == 'win'
+    @data([1, 2, 4, 5, 7], [2, 1, 5, 4, 8], [3, 2, 6, 5, 9])
+    def test_won_col(self, value):
+        assert self.play_game(value) == 'win'
 
     # def test_won_diag(self, player, diag):
-    def test_won_diag(self):
+    @data([1, 2, 5, 6, 9], [7, 8, 5, 6, 3])
+    def test_won_diag(self, value):
         """ diag could be lr or rl """
-        assert self.play_game([1, 2, 5, 6, 9]) == 'win'
+        assert self.play_game(value) == 'win'
 
-    def test_draw(self):
-        assert self.play_game([1, 5, 9, 2, 8, 7, 3, 6, 4]) == 'draw'
+    @data([1, 5, 9, 2, 8, 7, 3, 6, 4])
+    def test_draw(self, value):
+        assert self.play_game(value) == 'draw'
 
-    def test_quit_game(self):
-        assert self.play_game([0]) == False
+    @data([0])
+    def test_quit_game(self, value):
+        assert self.play_game(value) == False
 
 
 
