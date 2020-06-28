@@ -1,4 +1,4 @@
-class PlayTicTacToe():
+class PlayTicTacToe:
 
     def print_rows(self, rows):
         for row in rows:
