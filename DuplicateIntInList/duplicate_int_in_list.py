@@ -35,4 +35,4 @@ if __name__ == "__main__":
     obj_find_dup = DuplicateIntInList()
     my_user_input_list = obj_find_dup.get_user_input()
     print(f"User input: {my_user_input_list}")
-    print(obj_find_dup.find_duplicates(my_user_input_list))
+    print(f'List of duplicate integers: {obj_find_dup.find_duplicates(my_user_input_list)}')
